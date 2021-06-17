@@ -3,4 +3,4 @@
 client/build/
 host/build/
 enclave/build/
-enclave/src/main/resources/application.yml
+host/src/main/resources/application.yml
