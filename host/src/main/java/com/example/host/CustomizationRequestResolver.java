@@ -6,6 +6,8 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomizationRequestResolver
         implements OAuth2AuthorizationRequestResolver {
@@ -25,8 +27,10 @@ public class CustomizationRequestResolver
     @Override
     public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
         OAuth2AuthorizationRequest req = defaultResolver.resolve(request);
+        System.out.println("resolving request with custom resolver");
         if (req != null) {
             req = customizeAuthorizationRequest(req);
+            System.out.println(req);
         }
         return req;
     }
@@ -34,8 +38,10 @@ public class CustomizationRequestResolver
     @Override
     public OAuth2AuthorizationRequest resolve(HttpServletRequest request, String clientRegistrationId) {
         OAuth2AuthorizationRequest req = defaultResolver.resolve(request);
+        System.out.println("resolving request with custom resolver");
         if (req != null) {
             req = customizeAuthorizationRequest(req);
+            System.out.println(req);
         }
         return req;
     }
@@ -43,6 +49,15 @@ public class CustomizationRequestResolver
     private OAuth2AuthorizationRequest customizeAuthorizationRequest(
             OAuth2AuthorizationRequest req
     ) {
-        return OAuth2AuthorizationRequest.from(req).state("YOSKIBROSKIthisisaSTATE").build();
+        System.out.println(req.getAdditionalParameters());
+        Map<String, Object> additionalParameters = new HashMap<String, Object>();
+        additionalParameters.putAll(req.getAdditionalParameters());
+        //additionalParameters.put("nonce", "TESTNONCE");
+        //return OAuth2AuthorizationRequest.from(req).additionalParameters(additionalParameters).build();
+        return OAuth2AuthorizationRequest.from(req)
+                .state("xyz")
+                .additionalParameters(additionalParameters)
+                .build();
+        //return req;
     }
 }

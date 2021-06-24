@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class OidcServerApplication {
 
-	//@Bean(destroyMethod = "close")
+	@Bean(destroyMethod = "close")
 	public EnclaveHost enclave() throws EnclaveLoadException {
 		try {
 			EnclaveHost.checkPlatformSupportsEnclaves(true);
