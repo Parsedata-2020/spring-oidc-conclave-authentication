@@ -34,7 +34,7 @@ public class SpringController {
     }
 
     @GetMapping("/attestation")
-    public String attestation() {
+    public byte[] attestation() {
         EnclaveInstanceInfo attestation = enclave.getEnclaveInstanceInfo();
         //byte[] attestationBytes = attestation.serialize();
         //return attestation.toString();
@@ -46,7 +46,7 @@ public class SpringController {
             return e.toString();
         }
          */
-        return attestation.serialize().toString();
+        return attestation.serialize();
     }
 }
 
