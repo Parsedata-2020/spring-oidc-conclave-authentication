@@ -26,10 +26,11 @@ public class CustomizationRequestResolver
 
     @Override
     public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
+        String pub_key = request.getParameter("pubkey");
         OAuth2AuthorizationRequest req = defaultResolver.resolve(request);
         System.out.println("resolving request with custom resolver");
         if (req != null) {
-            req = customizeAuthorizationRequest(req);
+            req = customizeAuthorizationRequest(req, pub_key);
             System.out.println(req);
         }
         return req;
@@ -37,17 +38,18 @@ public class CustomizationRequestResolver
 
     @Override
     public OAuth2AuthorizationRequest resolve(HttpServletRequest request, String clientRegistrationId) {
+        String pub_key = request.getParameter("pubkey");
         OAuth2AuthorizationRequest req = defaultResolver.resolve(request);
         System.out.println("resolving request with custom resolver");
         if (req != null) {
-            req = customizeAuthorizationRequest(req);
+            req = customizeAuthorizationRequest(req, pub_key);
             System.out.println(req);
         }
         return req;
     }
 
     private OAuth2AuthorizationRequest customizeAuthorizationRequest(
-            OAuth2AuthorizationRequest req
+            OAuth2AuthorizationRequest req, String pub_key
     ) {
         System.out.println(req.getAdditionalParameters());
         Map<String, Object> additionalParameters = new HashMap<String, Object>();
@@ -55,7 +57,7 @@ public class CustomizationRequestResolver
         //additionalParameters.put("nonce", "TESTNONCE");
         //return OAuth2AuthorizationRequest.from(req).additionalParameters(additionalParameters).build();
         return OAuth2AuthorizationRequest.from(req)
-                .state("xyz")
+                .state(pub_key)
                 .additionalParameters(additionalParameters)
                 .build();
         //return req;
