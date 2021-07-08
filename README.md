@@ -2,6 +2,49 @@
 A simple attempt at running a Spring Boot server 
 (with a resource protected by OpenID Connect authentication) inside a secure enclave.
 
+### Getting started
+Clone this repository.
+
+Then, create the following file: `host/src/main/resources/application.yml`.
+
+Into the `application.yml` file, paste the following:
+
+```
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: <your-client-id>
+            client-secret: <your-client-secret>
+```
+
+Remember to replace `<your-client-id>` with your actual client ID, and `<your-client-secret>`
+with your actual client secret. replace `google` with whatever service you are using,
+but this may require extra configuration if that service does not have a default
+setup with Spring Security.
+
+run `./gradlew host:run`, and if everything goes well, you will have a Spring server
+running on `localhost:8080`. If your terminal doesn't spit out a bunch of scary errors,
+try running (assuming you have curl) 
+`curl -v http://localhost:8080/oauth2/authorization/google?pubkey=HELLO`.
+You should see a header property in the response of the form:
+`Location: https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=900783094046-ofbmg9vjjj3s7rlothspmhar185g72il.apps.googleusercontent.com&scope=openid%20profile%20email&state=HELLO&redirect_uri=http://localhost:8080/login/oauth2/code/google&nonce=K9gfEU-Cb_v4trhJ9Iv_MWfEc7zdewwrLDOZnBVNdpk`
+where you will notice that the URL-encoded `state` matches the URL-encoded `pubkey` of the
+curl request (namely, both are `HELLO`). 
+You can try changing this from `HELLO` to something else, and convince yourself
+that the `state` in the response changes accordingly.
+
+~~Paste the value of `Location` into your browser, and you should be directed to a Google
+sign in page (or a different service, according to your `application.yml` file).
+After signing in, you should see a big mess of text; this is the authorization code that
+Google will pass the RP (the host, in this case).~~ This doesn't work because the `state`
+doesn't match your browser, so your browser will spit out an error. 
+It *will* work if you paste `localhost:8080/oauth2/authorization/google?pubkey=HELLO`
+directly into your browser, as your browser will remember the state of the request
+that it gets i response.
+
 ### (Eventual) Use Case
 A user has an AWS Cognito ID, can sign in with AWS Cognito, and wants to
 (eventually, through intermediate APIs) make e.g. Corda transactions.
