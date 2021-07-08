@@ -48,6 +48,10 @@ public class CustomizationRequestResolver
         return req;
     }
 
+    // TODO: make pubkey be passed as nonce, not state
+    //  ACTUALLY: state remains in the code, nonce does not
+    //  Also, state is transmitted into the id token later,
+    //  so it can be retrieved directly.
     private OAuth2AuthorizationRequest customizeAuthorizationRequest(
             OAuth2AuthorizationRequest req, String pub_key
     ) {
