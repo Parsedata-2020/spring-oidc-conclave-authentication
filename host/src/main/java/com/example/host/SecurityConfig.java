@@ -22,13 +22,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // this is how the oauth login will happen
                 .oauth2Login()
                 // configure the endpoint
-                .authorizationEndpoint()
-                // add our own resolver; this changes parameters sent in the code as we like
-                .authorizationRequestResolver(
-                        new CustomizationRequestResolver(
-                                registrationRepository,
-                                "/oauth2/authorization"
-                        )
+                .authorizationEndpoint(
+                        authorizationEndpoint ->
+                                // add our own resolver; this changes parameters sent in the code as we like
+                                authorizationEndpoint.authorizationRequestResolver(
+                                        new CustomizationRequestResolver(
+                                                registrationRepository,
+                                                "/oauth2/authorization"
+                                        )
+                                )
+
+                )
+                .tokenEndpoint(tokenEndpointConfig ->
+                        tokenEndpointConfig.accessTokenResponseClient(new CustomOAuth2AccessTokenResponseClient())
                 );
     }
 }
