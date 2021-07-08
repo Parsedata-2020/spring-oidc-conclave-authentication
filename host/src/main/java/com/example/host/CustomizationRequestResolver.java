@@ -22,6 +22,8 @@ public class CustomizationRequestResolver
                 repo,
                 authorizationRequestBaseUri
         );
+
+        //System.out.println("NEW CustomizationRequestResolver CREATED!!!");
     }
 
     @Override
