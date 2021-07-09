@@ -45,13 +45,6 @@ public class CustomizationRequestResolver
         String pub_key = request.getParameter("pubkey");
         defaultResolver.setAuthorizationRequestCustomizer(pubkeyInNonce(pub_key));
         OAuth2AuthorizationRequest req = defaultResolver.resolve(request);
-        /*
-        System.out.println("resolving request with custom resolver");
-        if (req != null) {
-            req = customizeAuthorizationRequest(req, pub_key);
-            System.out.println(req);
-        }
-         */
         return req;
     }
 
@@ -60,27 +53,3 @@ public class CustomizationRequestResolver
                 customizer.additionalParameters(params -> params.put("nonce", pub_key));
     }
 }
-
-    /*
-    // TODO: make pubkey be passed as nonce, not state
-    //  ACTUALLY: state remains in the code, nonce does not
-    //  Also, state is transmitted into the id token later,
-    //  so it can be retrieved directly.
-    private OAuth2AuthorizationRequest customizeAuthorizationRequest(
-            OAuth2AuthorizationRequest req, String pub_key
-    ) {
-        // Practice nonce=B4BxlJ3qwLh5HWdnaYjZdapMcRHq94ycSCut0gHWVIo
-        System.out.println(req.getAdditionalParameters());
-        Map<String, Object> additionalParameters = new HashMap<String, Object>();
-        additionalParameters.putAll(req.getAdditionalParameters());
-        //additionalParameters.put("nonce", "B4BxlJ3qwLh5HWdnaYjZdapMcRHq94ycSCut0gHWVIo");
-        additionalParameters.replace("nonce", "B4BxlJ3qwLh5HWdnaYjZdapMcRHq94ycSCut0gHWVIo");
-        //return OAuth2AuthorizationRequest.from(req).additionalParameters(additionalParameters).build();
-        return OAuth2AuthorizationRequest.from(req)
-                .state(pub_key)
-                .additionalParameters(additionalParameters)
-                .build();
-        //return req;
-    }
-
-     */
