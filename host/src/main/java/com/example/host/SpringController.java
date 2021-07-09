@@ -62,9 +62,12 @@ public class SpringController {
         return securityContext.getAuthentication().toString();
     }
 
+    @GetMapping("/user/message")
+    public byte[] message() {
+        return null;
+    }
 
-
-        @GetMapping("/attestation")
+    @GetMapping("/attestation")
     public byte[] attestation() {
         EnclaveInstanceInfo attestation = enclave.getEnclaveInstanceInfo();
         //byte[] attestationBytes = attestation.serialize();
