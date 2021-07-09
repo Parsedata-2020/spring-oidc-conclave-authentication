@@ -17,9 +17,6 @@ public class CustomOAuth2AccessTokenResponseClient implements OAuth2AccessTokenR
 
     private OAuth2AccessTokenResponseClient defaultAuthorizationCodeTokenResponseClient;
 
-    @Autowired
-    private Hashtable<Authentication, AuthenticationWrapper> authenticationWrappers;
-
     public CustomOAuth2AccessTokenResponseClient() {
         this.defaultAuthorizationCodeTokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
     }

@@ -36,12 +36,6 @@ public class OidcServerApplication {
 		return enclave;
 	}
 
-	@Bean
-	public Hashtable<Authentication, AuthenticationWrapper> authenticationWrappers() {
-	    System.out.println("CREATED NEW authenticationWrappers HASHTABLE");
-		return new Hashtable<>();
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(OidcServerApplication.class, args);
 	}
