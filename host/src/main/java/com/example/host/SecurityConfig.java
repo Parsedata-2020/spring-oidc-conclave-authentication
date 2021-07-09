@@ -6,9 +6,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     ClientRegistrationRepository registrationRepository;
 
@@ -36,5 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenEndpoint(tokenEndpointConfig ->
                         tokenEndpointConfig.accessTokenResponseClient(new CustomOAuth2AccessTokenResponseClient())
                 );
+
     }
+
 }
