@@ -33,12 +33,10 @@ public class CustomizationRequestResolver
         defaultResolver.setAuthorizationRequestCustomizer(pubkeyInNonce(pub_key));
         OAuth2AuthorizationRequest req = defaultResolver.resolve(request);
         System.out.println("resolving request with custom resolver");
-        /*
+        //System.out.println("additional parameters: " + req.getAdditionalParameters());
         if (req != null) {
-            req = customizeAuthorizationRequest(req, pub_key);
-            System.out.println(req);
+            System.out.println("additional parameters: " + req.getAdditionalParameters());
         }
-         */
         return req;
     }
 
