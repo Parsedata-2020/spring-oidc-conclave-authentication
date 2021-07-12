@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.client.oidc.authentication.OidcIdToke
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,8 +64,13 @@ public class SpringController {
     }
 
     @GetMapping("/user/message")
-    public byte[] message() {
-        return null;
+    public byte[] message(@CurrentSecurityContext SecurityContext securityContext, String message) {
+        // TODO: why is gradle soooo freaking evil?
+        RequestWrapper requestWrapper = new RequestWrapper(
+                ((DefaultOidcUser) securityContext.getAuthentication().getPrincipal())
+                        .getIdToken().getTokenValue(),
+                message);
+        enclave.callEnclave(SerializationUtils.serialize(requestWrapper));
     }
 
     @GetMapping("/attestation")
