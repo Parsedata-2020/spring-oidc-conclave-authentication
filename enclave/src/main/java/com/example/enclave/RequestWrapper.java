@@ -1,3 +1,5 @@
+package com.example.enclave;
+
 import java.io.Serializable;
 
 public class RequestWrapper implements Serializable {
