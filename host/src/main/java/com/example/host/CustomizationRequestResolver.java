@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 public class CustomizationRequestResolver
         implements OAuth2AuthorizationRequestResolver {
 
-    private DefaultOAuth2AuthorizationRequestResolver defaultResolver;
+    private final DefaultOAuth2AuthorizationRequestResolver defaultResolver;
 
     public CustomizationRequestResolver(
             ClientRegistrationRepository repo,
