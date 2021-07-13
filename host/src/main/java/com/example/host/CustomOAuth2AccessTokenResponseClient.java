@@ -13,6 +13,10 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Hashtable;
 
+/**
+ * Not used , should be safe to delete
+ */
+@Deprecated
 public class CustomOAuth2AccessTokenResponseClient implements OAuth2AccessTokenResponseClient {
 
     private OAuth2AccessTokenResponseClient defaultAuthorizationCodeTokenResponseClient;
