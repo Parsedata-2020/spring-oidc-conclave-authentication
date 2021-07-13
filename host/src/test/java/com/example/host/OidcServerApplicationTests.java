@@ -6,6 +6,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class OidcServerApplicationTests {
 
+    // TODO: check that proper beans are generated
+    //  (is this class really worthy of a unit test?)
+
+	/*
+	// All of the below should be in integration test folder, not unit test
 	@Test
 	void contextLoads() {
 	}
@@ -14,6 +19,10 @@ class OidcServerApplicationTests {
 	public void authenticatedUserSendingMail() {
 		// user should successfully send mail to the enclave, need some enclave feedback?
         // user sends messages to /user/message
+
+		// TODO: generate a proper id token
+        String id_token = "";
+
 
 	}
 
@@ -28,5 +37,6 @@ class OidcServerApplicationTests {
 		// due to the token not matching its signature
 		// token header should be accessed through oauth2login().tokenEndpoint.accessTokenResponseClient()
 	}
+	 */
 
 }
