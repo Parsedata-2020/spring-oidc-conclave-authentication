@@ -12,9 +12,9 @@ class OidcServerApplicationTests {
 
 	@Test
 	public void authenticatedUserSendingMail() {
-		// TODO what endpoint does the user send to?
-		// TODO is it a GET or POST?
 		// user should successfully send mail to the enclave, need some enclave feedback?
+        // user sends messages to /user/message
+
 	}
 
 	@Test
