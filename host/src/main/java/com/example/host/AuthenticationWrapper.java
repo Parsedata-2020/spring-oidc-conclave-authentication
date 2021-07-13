@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 
 import java.util.Map;
 
+@Deprecated
 public class AuthenticationWrapper {
     private final Authentication authentication;
     private final Map<String, Object> additionalParameters;
