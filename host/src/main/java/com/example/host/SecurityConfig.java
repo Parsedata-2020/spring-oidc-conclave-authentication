@@ -12,6 +12,12 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2Authorization
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    // TODO: Get rid of Autowired and instead use a constructor,
+    //  as autowiring should happen anyway but this allows for unit testing
+    //  NOTE: it seems that this may not be possible yet (https://stackoverflow.com/questions/35845106/is-constructor-injection-possible-in-spring-configuration-classes)
+    //  Due to a bug.
+    //  Maybe just hold off on unit-testing this?
+
     @Autowired
     ClientRegistrationRepository registrationRepository;
 

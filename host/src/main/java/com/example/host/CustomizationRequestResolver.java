@@ -28,6 +28,7 @@ public class CustomizationRequestResolver
         );
 
         //System.out.println("NEW CustomizationRequestResolver CREATED!!!");
+        //System.out.println(repo.findByRegistrationId("google").getRegistrationId());
     }
 
     @Override

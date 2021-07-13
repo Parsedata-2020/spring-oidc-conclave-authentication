@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 @RestController
 public class SpringController {
 
+    // TODO: replace this with constructor injection
     @Autowired
     private EnclaveHost enclave;
 
