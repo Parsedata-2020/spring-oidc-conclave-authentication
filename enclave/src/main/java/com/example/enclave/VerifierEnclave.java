@@ -10,7 +10,6 @@ public class VerifierEnclave extends Enclave {
     @Override
     protected void receiveMail(long id, EnclaveMail mail, String routingHint) {
         // The routingHint will be the String containing the base64-encoded id token
-
         // TODO: decode the JWT and verify it and the mail public key from routingHint
 
         // after decryption, doStuff with getBodyAsBytes()
