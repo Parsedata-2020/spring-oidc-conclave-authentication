@@ -1,22 +1,11 @@
 package com.example.host;
 
-import com.example.enclave.RequestWrapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r3.conclave.common.EnclaveInstanceInfo;
 import com.r3.conclave.host.EnclaveHost;
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.web.servlet.oauth2.client.OAuth2ClientSecurityMarker;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.client.oidc.authentication.OidcIdTokenValidator;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

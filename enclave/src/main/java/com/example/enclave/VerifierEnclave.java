@@ -2,9 +2,7 @@ package com.example.enclave;
 
 import com.r3.conclave.enclave.Enclave;
 import com.r3.conclave.mail.EnclaveMail;
-import org.apache.commons.lang3.SerializationUtils;
 
-import java.nio.charset.StandardCharsets;
 
 public class VerifierEnclave extends Enclave {
     // TODO use receiveMail with token in routingHint
@@ -20,13 +18,6 @@ public class VerifierEnclave extends Enclave {
 
         // temporarily, encrypt the message and post it back with the same routingHint
         postMail(postOffice(mail).encryptMail(responseMessage), routingHint);
-    }
-
-    @Override
-    public byte[] receiveFromUntrustedHost(byte[] bytes) {
-        RequestWrapper requestWrapper = (RequestWrapper) SerializationUtils.deserialize(bytes);
-        return doStuff(requestWrapper.message.getBytes(StandardCharsets.UTF_8));
-        // TODO return mail
     }
 
     private byte[] doStuff(byte[] message) {
