@@ -20,6 +20,8 @@ import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.StandardCharsets;
+
 @RestController
 public class SpringController {
 
@@ -66,11 +68,19 @@ public class SpringController {
 
     @GetMapping("/user/message")
     public byte[] message(@CurrentSecurityContext SecurityContext securityContext, String message) {
+        /*
         RequestWrapper requestWrapper = new RequestWrapper(
                 ((DefaultOidcUser) securityContext.getAuthentication().getPrincipal())
                         .getIdToken().getTokenValue(),
                 message);
-        return enclave.callEnclave(SerializationUtils.serialize(requestWrapper));
+         */
+        //return enclave.callEnclave(SerializationUtils.serialize(requestWrapper));
+        enclave.deliverMail(1, message.getBytes(StandardCharsets.UTF_8),
+                ((DefaultOidcUser) securityContext.getAuthentication().getPrincipal())
+                        .getIdToken().getTokenValue());
+        // TODO: return a page that has asyncronous javascript to get the resulting mail
+        //  when it becomes available
+        return null;
     }
 
     @GetMapping("/attestation")
