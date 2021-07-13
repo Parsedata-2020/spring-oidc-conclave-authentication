@@ -1,5 +1,6 @@
 package com.example.host;
 
+import com.example.enclave.RequestWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r3.conclave.common.EnclaveInstanceInfo;
@@ -65,12 +66,11 @@ public class SpringController {
 
     @GetMapping("/user/message")
     public byte[] message(@CurrentSecurityContext SecurityContext securityContext, String message) {
-        // TODO: why is gradle soooo freaking evil?
         RequestWrapper requestWrapper = new RequestWrapper(
                 ((DefaultOidcUser) securityContext.getAuthentication().getPrincipal())
                         .getIdToken().getTokenValue(),
                 message);
-        enclave.callEnclave(SerializationUtils.serialize(requestWrapper));
+        return enclave.callEnclave(SerializationUtils.serialize(requestWrapper));
     }
 
     @GetMapping("/attestation")
