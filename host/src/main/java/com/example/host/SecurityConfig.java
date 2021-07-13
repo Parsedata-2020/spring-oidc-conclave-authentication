@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 )
 
                 )
+                // TODO: get rid of this and just use the regular old access token response client
                 .tokenEndpoint(tokenEndpointConfig ->
                         tokenEndpointConfig.accessTokenResponseClient(new CustomOAuth2AccessTokenResponseClient())
                 );
