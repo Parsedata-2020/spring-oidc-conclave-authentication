@@ -144,6 +144,13 @@ public class CustomRequestResolverTests {
     }
 
 
+    /**
+     * Static class to generate valid OAuth2AuthorizationRequest.Builder s
+     * to test pubkeyInNonce().
+     *
+     * Stolen from
+     * https://github.com/spring-projects/spring-security/blob/main/oauth2/oauth2-core/src/test/java/org/springframework/security/oauth2/core/endpoint/TestOAuth2AuthorizationRequests.java
+     */
     public static final class TestOAuth2AuthorizationRequests {
 
         private TestOAuth2AuthorizationRequests() {
