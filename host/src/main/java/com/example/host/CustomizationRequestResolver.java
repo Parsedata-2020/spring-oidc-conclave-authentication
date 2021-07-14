@@ -31,6 +31,12 @@ public class CustomizationRequestResolver
         //System.out.println(repo.findByRegistrationId("google").getRegistrationId());
     }
 
+    public CustomizationRequestResolver(
+            DefaultOAuth2AuthorizationRequestResolver defaultResolver
+    ) {
+        this.defaultResolver = defaultResolver;
+    }
+
     @Override
     public OAuth2AuthorizationRequest resolve(HttpServletRequest request) {
         String pub_key = request.getParameter("pubkey");

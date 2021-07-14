@@ -36,8 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 // add our own resolver; this changes parameters sent in the code as we like
                                 authorizationEndpoint.authorizationRequestResolver(
                                         new CustomizationRequestResolver(
-                                                registrationRepository,
-                                                "/oauth2/authorization"
+                                                new DefaultOAuth2AuthorizationRequestResolver(
+                                                        registrationRepository,
+                                                        "/oauth2/authorization"
+                                                )
+
                                         )
                                 )
 
