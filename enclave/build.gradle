@@ -11,6 +11,8 @@ repositories {
 
 dependencies {
     implementation "com.r3.conclave:conclave-enclave"
+    testImplementation "com.r3.conclave:conclave-testing"
+    testImplementation "com.r3.conclave:conclave-host:$conclaveVersion"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
