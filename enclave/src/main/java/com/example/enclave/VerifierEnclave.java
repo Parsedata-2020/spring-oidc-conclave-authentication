@@ -68,7 +68,7 @@ public class VerifierEnclave extends Enclave {
         try {
             token = JWTParser.parse(routingHint);
         } catch (ParseException e) {
-            throw(new IllegalArgumentException(e.getMessage()));
+            throw new IllegalArgumentException(e);
         }
 
         // variable to store the name of the person,
@@ -80,8 +80,11 @@ public class VerifierEnclave extends Enclave {
             // Could foreseeably call some other service here and then come back with the identifier
             name = (String) token.getJWTClaimsSet().getClaim("name");
         } catch (ParseException e) {
-            throw(new IllegalArgumentException(e.getMessage()));
+            throw new IllegalArgumentException(e);
         }
+
+        // verify that mail's public key matches the nonce in routingHint
+
 
         // do whatever must be done, based on the RequestHandler used
         byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), name);
