@@ -59,28 +59,31 @@ public class VerifierEnclave extends Enclave {
      * @param routingHint the id token that the host receives from the OP (e.g. as per the corresponding unit test)
      */
     @Override
-    protected void receiveMail(long id, EnclaveMail mail, String routingHint) {
+    protected void receiveMail(long id, EnclaveMail mail, String routingHint) throws IllegalArgumentException {
         // The routingHint will be the String containing the base64-encoded id token
-        // TODO: decode the JWT and verify it and the mail public key from routingHint
-        //Jwt token = Jwt.withTokenValue(routingHint).build();
+        // token variable will store the decoded token
         JWT token = null;
+
+        // attempt to parse the token. if it is invalid throw an error.
         try {
             token = JWTParser.parse(routingHint);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw(new IllegalArgumentException(e.getMessage()));
         }
 
-        //String name = (String) token.getClaims().get("name");
+        // variable to store the name of the person,
+        // or whatever is used as the unique identifying string
         String name = null;
         try {
+            // currently, using the "name" claim from within the token.
+            // Replace with something else if needed.
+            // Could foreseeably call some other service here and then come back with the identifier
             name = (String) token.getJWTClaimsSet().getClaim("name");
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw(new IllegalArgumentException(e.getMessage()));
         }
-        System.out.println("name: " + name);
 
-        // TODO: get the actual userId, not everybody can be Batman ;-(
-        // after decryption, doStuff with getBodyAsBytes()
+        // do whatever must be done, based on the RequestHandler used
         byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), name);
 
         // temporarily, encrypt the message and post it back with the same routingHint
