@@ -2,14 +2,21 @@ package com.example.enclave;
 
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTParser;
+import com.r3.conclave.common.SHA256Hash;
 import com.r3.conclave.enclave.Enclave;
 import com.r3.conclave.mail.EnclaveMail;
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.text.ParseException;
+import java.util.Base64;
 
 /**
  * The enclave proper, which only receives messages and verifies the id token sent with them.
@@ -84,7 +91,29 @@ public class VerifierEnclave extends Enclave {
         }
 
         // verify that mail's public key matches the nonce in routingHint
+        PublicKey senderPubKey = mail.getAuthenticatedSender();
 
+        String producedHash = Base64.getUrlEncoder().withoutPadding().encodeToString(
+                    SHA256Hash.hash(
+                            new String(
+                                    Hex.encode(senderPubKey.getEncoded())
+                            ).getBytes(StandardCharsets.UTF_8)
+                    ).getBytes()
+        );
+
+        String actualPubKeyHash;
+        try {
+            actualPubKeyHash = (String) token.getJWTClaimsSet().getClaim("nonce");
+        } catch (ParseException e) {
+            // TODO: Throw a different error for the case where you can't get a nonce from the token
+            throw new IllegalArgumentException(e);
+        }
+
+        if (!(actualPubKeyHash).equals(producedHash)) {
+            System.out.println("nonce value:\n" + actualPubKeyHash + "\n");
+            System.out.println("produced hash value:\n" + producedHash + "\n");
+            throw new IllegalArgumentException("Invalid public key!");
+        }
 
         // do whatever must be done, based on the RequestHandler used
         byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), name);
