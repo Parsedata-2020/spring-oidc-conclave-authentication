@@ -93,14 +93,6 @@ public class VerifierEnclave extends Enclave {
         // verify that mail's public key matches the nonce in routingHint
         PublicKey senderPubKey = mail.getAuthenticatedSender();
 
-        String producedHash = Base64.getUrlEncoder().withoutPadding().encodeToString(
-                    SHA256Hash.hash(
-                            new String(
-                                    Hex.encode(senderPubKey.getEncoded())
-                            ).getBytes(StandardCharsets.UTF_8)
-                    ).getBytes()
-        );
-
         String actualPubKeyHash;
         try {
             actualPubKeyHash = (String) token.getJWTClaimsSet().getClaim("nonce");
@@ -109,17 +101,28 @@ public class VerifierEnclave extends Enclave {
             throw new IllegalArgumentException(e);
         }
 
-        if (!(actualPubKeyHash).equals(producedHash)) {
-            System.out.println("nonce value:\n" + actualPubKeyHash + "\n");
-            System.out.println("produced hash value:\n" + producedHash + "\n");
-            throw new IllegalArgumentException("Invalid public key!");
-        }
+        publicKeyValid(senderPubKey, actualPubKeyHash);
 
         // do whatever must be done, based on the RequestHandler used
         byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), name);
 
         // temporarily, encrypt the message and post it back with the same routingHint
         postMail(postOffice(mail).encryptMail(responseMessage), routingHint);
+    }
+
+    private void publicKeyValid(PublicKey senderKey, String nonce) {
+        String producedHash = Base64.getUrlEncoder().withoutPadding().encodeToString(
+                SHA256Hash.hash(
+                        new String(
+                                Hex.encode(senderKey.getEncoded())
+                        ).getBytes(StandardCharsets.UTF_8)
+                ).getBytes()
+        );
+
+        if (!(nonce).equals(producedHash)) {
+            throw new IllegalArgumentException("Invalid public key!");
+        }
+
     }
 
 }
