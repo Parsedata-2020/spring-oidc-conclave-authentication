@@ -234,7 +234,6 @@ public class VerifierEnclaveTests {
         // the test userID that is currently hard-coded into VerifierEnclave
         final String userId = "Daniel Shteinbok";
 
-
         // the attestation we get from the enclave, which contains its public key
         EnclaveInstanceInfo attestation = enclaveHost.getEnclaveInstanceInfo();
 
@@ -242,15 +241,11 @@ public class VerifierEnclaveTests {
         PostOffice postOffice = attestation.createPostOffice(secretKey, "message");
         byte[] encryptedMessage = postOffice.encryptMail(message);
 
-        // stub mockHandler.handleMessage so that it doesn't return null
-        // and cause null pointer exceptions in the enclave
-        when(mockHandler.handleMessage(message, userId))
-                .thenReturn(response);
-
-
         // actually deliver the encrypted message to the enclave the way that the untrusted host would
         assertThrows(IllegalArgumentException.class, () -> enclaveHost.deliverMail(1, encryptedMessage, id_token));
 
+        // ensure that mockHandler is never actually called
+        verify(mockHandler, never()).handleMessage(any(), any());
     }
 
 }
