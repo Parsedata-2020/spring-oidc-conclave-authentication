@@ -121,8 +121,7 @@ public class VerifierEnclaveTests {
         final byte[] response = "response".getBytes(StandardCharsets.UTF_8);
 
         // the test userID that is currently hard-coded into VerifierEnclave
-        final String userId = "BATMAAAAAAN!!";
-
+        final String userId = "Daniel Shteinbok";
 
 
         // the attestation we get from the enclave, which contains its public key
@@ -134,7 +133,13 @@ public class VerifierEnclaveTests {
 
         // stub mockHandler.handleMessage so that it doesn't return null
         // and cause null pointer exceptions in the enclave
+        /*
         when(mockHandler.handleMessage(message, userId))
+                .thenReturn(response);
+
+         */
+
+        when(mockHandler.handleMessage(any(), any()))
                 .thenReturn(response);
 
         // actually deliver the encrypted message to the enclave the way that the untrusted host would

@@ -1,7 +1,14 @@
 package com.example.enclave;
 
+import com.nimbusds.jwt.JWTParser;
 import com.r3.conclave.enclave.Enclave;
 import com.r3.conclave.mail.EnclaveMail;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+
+import java.text.ParseException;
 
 /**
  * The enclave proper, which only receives messages and verifies the id token sent with them.
@@ -54,10 +61,14 @@ public class VerifierEnclave extends Enclave {
     protected void receiveMail(long id, EnclaveMail mail, String routingHint) {
         // The routingHint will be the String containing the base64-encoded id token
         // TODO: decode the JWT and verify it and the mail public key from routingHint
+        Jwt token = Jwt.withTokenValue(routingHint).build();
+
+        String name = (String) token.getClaims().get("name");
+        System.out.println("name: " + name);
 
         // TODO: get the actual userId, not everybody can be Batman ;-(
         // after decryption, doStuff with getBodyAsBytes()
-        byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), "BATMAAAAAAN!!");
+        byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), name);
 
         // temporarily, encrypt the message and post it back with the same routingHint
         postMail(postOffice(mail).encryptMail(responseMessage), routingHint);
