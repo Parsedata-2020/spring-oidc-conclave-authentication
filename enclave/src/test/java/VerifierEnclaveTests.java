@@ -73,5 +73,9 @@ public class VerifierEnclaveTests {
     @Test
     public void testHappyCaseReturnedMail() {
         // TODO: test the generation and delivery of mail
+        // Set secret key
+        // Get attestation
+        // Encrypt mail
+        // Send mail with pre-generated id token code
     }
 }
