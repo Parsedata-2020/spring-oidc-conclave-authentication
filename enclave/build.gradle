@@ -23,7 +23,8 @@ dependencies {
 conclave {
     productID = 1
     revocationLevel = 0
-    runtime = graalvm_native_image
+    //runtime = graalvm_native_image
+    runtime = avian
 }
 
 test {
