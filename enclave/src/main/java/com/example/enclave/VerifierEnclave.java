@@ -1,5 +1,6 @@
 package com.example.enclave;
 
+import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTParser;
 import com.r3.conclave.enclave.Enclave;
 import com.r3.conclave.mail.EnclaveMail;
@@ -61,9 +62,21 @@ public class VerifierEnclave extends Enclave {
     protected void receiveMail(long id, EnclaveMail mail, String routingHint) {
         // The routingHint will be the String containing the base64-encoded id token
         // TODO: decode the JWT and verify it and the mail public key from routingHint
-        Jwt token = Jwt.withTokenValue(routingHint).build();
+        //Jwt token = Jwt.withTokenValue(routingHint).build();
+        JWT token = null;
+        try {
+            token = JWTParser.parse(routingHint);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        String name = (String) token.getClaims().get("name");
+        //String name = (String) token.getClaims().get("name");
+        String name = null;
+        try {
+            name = (String) token.getJWTClaimsSet().getClaim("name");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         System.out.println("name: " + name);
 
         // TODO: get the actual userId, not everybody can be Batman ;-(

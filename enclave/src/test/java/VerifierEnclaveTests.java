@@ -133,14 +133,9 @@ public class VerifierEnclaveTests {
 
         // stub mockHandler.handleMessage so that it doesn't return null
         // and cause null pointer exceptions in the enclave
-        /*
         when(mockHandler.handleMessage(message, userId))
                 .thenReturn(response);
 
-         */
-
-        when(mockHandler.handleMessage(any(), any()))
-                .thenReturn(response);
 
         // actually deliver the encrypted message to the enclave the way that the untrusted host would
         enclaveHost.deliverMail(1, encryptedMessage, id_token);
