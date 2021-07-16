@@ -30,31 +30,54 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation "com.r3.conclave:conclave-client:$conclaveVersion"
 	testImplementation 'org.mockito:mockito-inline:+'
+
 }
 
 sourceSets {
-	integrationTest {
+	intTest {
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
 		java {
-			compileClasspath += main.output + test.output
-			runtimeClasspath += main.output + test.output
-			srcDir file('src/integrationTest/java')
+			srcDirs = ['src/integrationTest/java']
 		}
 	}
 }
 
-task integrationTest(type: Test) {
-	setTestClassesDirs(sourceSets.integrationTest.output)
-	classpath = sourceSets.integrationTest.runtimeClasspath
+configurations {
+	intTestImplementation.extendsFrom implementation
+	intTestRuntimeOnly.extendsFrom runtimeOnly
 }
 
+dependencies {
+	intTestImplementation 'org.springframework.boot:spring-boot-starter-test'
+	intTestImplementation "com.r3.conclave:conclave-client:$conclaveVersion"
+	intTestImplementation 'org.mockito:mockito-inline:+'
+}
 
+/*
 integrationTest {
 	useJUnitPlatform()
 }
+ */
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs the integration tests.'
+	group = 'verification'
+
+	testClassesDirs = sourceSets.intTest.output.classesDirs
+	classpath = sourceSets.intTest.runtimeClasspath
+
+	shouldRunAfter test
+}
 
 test {
+	useJUnitPlatform()
+}
+
+integrationTest {
 	useJUnitPlatform()
 }
