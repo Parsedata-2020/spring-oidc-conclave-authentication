@@ -35,6 +35,26 @@ dependencies {
 	testImplementation 'org.mockito:mockito-inline:+'
 }
 
+sourceSets {
+	integrationTest {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/integrationTest/java')
+		}
+	}
+}
+
+task integrationTest(type: Test) {
+	setTestClassesDirs(sourceSets.integrationTest.output)
+	classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+
+integrationTest {
+	useJUnitPlatform()
+}
+
 test {
 	useJUnitPlatform()
 }
