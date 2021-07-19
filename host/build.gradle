@@ -54,6 +54,7 @@ configurations {
 
 dependencies {
 	intTestImplementation 'org.springframework.boot:spring-boot-starter-test'
+	intTestImplementation 'org.springframework.security:spring-security-test'
 	intTestImplementation "com.r3.conclave:conclave-client:$conclaveVersion"
 	intTestImplementation 'org.mockito:mockito-inline:+'
 }
