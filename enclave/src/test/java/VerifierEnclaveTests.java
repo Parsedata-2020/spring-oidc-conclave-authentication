@@ -2,6 +2,7 @@ import com.example.enclave.RequestHandler;
 import com.example.enclave.VerifierEnclave;
 import com.r3.conclave.common.EnclaveInstanceInfo;
 import com.r3.conclave.common.SHA256Hash;
+import com.r3.conclave.enclave.EnclavePostOffice;
 import com.r3.conclave.host.AttestationParameters;
 import com.r3.conclave.host.EnclaveLoadException;
 import com.r3.conclave.host.MailCommand;
@@ -139,7 +140,7 @@ public class VerifierEnclaveTests {
 
         // stub mockHandler.handleMessage so that it doesn't return null
         // and cause null pointer exceptions in the enclave
-        when(mockHandler.handleMessage(message, userId))
+        when(mockHandler.handleMessage(eq(message), eq(userId), any()))
                 .thenReturn(response);
 
 
@@ -148,7 +149,7 @@ public class VerifierEnclaveTests {
 
         // Time for verification!
         // here, just check that our mock RequestHandler object's handleMessage() was called with the expected message
-        verify(mockHandler).handleMessage(message, userId);
+        verify(mockHandler).handleMessage(eq(message), eq(userId), any());
 
         // receive the response mail from the enclave and verify that it contains the expected response
         byte[] responseBytes = mailToSend.getAndSet(null);
@@ -192,7 +193,7 @@ public class VerifierEnclaveTests {
         assertThrows(IllegalArgumentException.class, () -> enclaveHost.deliverMail(1, encryptedMessage, invalidToken));
 
         // verify that the mockHandler was not called at all, because that means trouble
-        verify(mockHandler, never()).handleMessage(any(), any());
+        verify(mockHandler, never()).handleMessage(any(), any(), any());
     }
 
     /**
@@ -245,7 +246,7 @@ public class VerifierEnclaveTests {
         assertThrows(IllegalArgumentException.class, () -> enclaveHost.deliverMail(1, encryptedMessage, id_token));
 
         // ensure that mockHandler is never actually called
-        verify(mockHandler, never()).handleMessage(any(), any());
+        verify(mockHandler, never()).handleMessage(any(), any(), any());
     }
 
 }

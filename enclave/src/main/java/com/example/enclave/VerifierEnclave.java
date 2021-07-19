@@ -104,7 +104,7 @@ public class VerifierEnclave extends Enclave {
         publicKeyValid(senderPubKey, actualPubKeyHash);
 
         // do whatever must be done, based on the RequestHandler used
-        byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), name);
+        byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), name, postOffice(mail));
 
         // temporarily, encrypt the message and post it back with the same routingHint
         postMail(postOffice(mail).encryptMail(responseMessage), routingHint);
