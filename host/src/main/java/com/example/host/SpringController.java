@@ -3,11 +3,11 @@ package com.example.host;
 import com.r3.conclave.common.EnclaveInstanceInfo;
 import com.r3.conclave.host.EnclaveHost;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
 
@@ -56,8 +56,12 @@ public class SpringController {
         return securityContext.getAuthentication().toString();
     }
 
-    @GetMapping("/user/message")
-    public byte[] message(@CurrentSecurityContext SecurityContext securityContext, String message) {
+    @PostMapping(path="/user/message",
+            //consumes = MediaType.APPLICATION_JSON_VALUE
+            consumes = MediaType.TEXT_PLAIN_VALUE
+            //produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public byte[] message(@CurrentSecurityContext SecurityContext securityContext, @RequestBody String message) {
         /*
         RequestWrapper requestWrapper = new RequestWrapper(
                 ((DefaultOidcUser) securityContext.getAuthentication().getPrincipal())
