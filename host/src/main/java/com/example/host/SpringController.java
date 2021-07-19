@@ -14,9 +14,11 @@ import java.nio.charset.StandardCharsets;
 @RestController
 public class SpringController {
 
-    // TODO: replace this with constructor injection
-    @Autowired
     private EnclaveHost enclave;
+
+    public SpringController(EnclaveHost enclave) {
+        this.enclave = enclave;
+    }
 
     @GetMapping("/user")
     public String user(@CurrentSecurityContext SecurityContext securityContext) {
