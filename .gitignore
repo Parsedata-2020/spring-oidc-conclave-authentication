@@ -4,3 +4,4 @@ client/build/
 host/build/
 enclave/build/
 host/src/main/resources/application.yml
+host/src/integrationTest/resources/application.yml
