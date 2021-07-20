@@ -57,6 +57,9 @@ dependencies {
 	intTestImplementation 'org.springframework.security:spring-security-test'
 	intTestImplementation "com.r3.conclave:conclave-client:$conclaveVersion"
 	intTestImplementation 'org.mockito:mockito-inline:+'
+
+	// WireMock, for stubbing an OIDC OP in integration test
+	intTestImplementation "com.github.tomakehurst:wiremock-jre8:$wireMockVersion"
 }
 
 /*
