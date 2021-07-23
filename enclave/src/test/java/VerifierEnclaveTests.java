@@ -1,5 +1,7 @@
 import com.example.enclave.RequestHandler;
 import com.example.enclave.VerifierEnclave;
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.JWTParser;
 import com.r3.conclave.common.EnclaveInstanceInfo;
 import com.r3.conclave.common.SHA256Hash;
 import com.r3.conclave.enclave.EnclavePostOffice;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
+import java.text.ParseException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,7 +91,7 @@ public class VerifierEnclaveTests {
      * - returns the mail that we expect (passes back the same response it gets from mockHandler)
      */
     @Test
-    public void testHappyCaseReturnedMail() throws IOException {
+    public void testHappyCaseReturnedMail() throws IOException, ParseException {
         // Set secret key
         // secret key = Curve25519PrivateKey(SHA256.hash("secret".getBytes()).getBytes)
         // public key encoded: a946160f377bc3591cd0224bcc38ec120f2c16ab7705ccdb3ddff372c89e7e24
@@ -128,7 +131,8 @@ public class VerifierEnclaveTests {
         final byte[] response = "response".getBytes(StandardCharsets.UTF_8);
 
         // the test userID that is currently hard-coded into VerifierEnclave
-        final String userId = "Daniel Shteinbok";
+        //final String userId = "Daniel Shteinbok";
+        JWT userId = JWTParser.parse(id_token);
 
 
         // the attestation we get from the enclave, which contains its public key
@@ -233,7 +237,7 @@ public class VerifierEnclaveTests {
         final byte[] response = "response".getBytes(StandardCharsets.UTF_8);
 
         // the test userID that is currently hard-coded into VerifierEnclave
-        final String userId = "Daniel Shteinbok";
+        //final String userId = "Daniel Shteinbok";
 
         // the attestation we get from the enclave, which contains its public key
         EnclaveInstanceInfo attestation = enclaveHost.getEnclaveInstanceInfo();

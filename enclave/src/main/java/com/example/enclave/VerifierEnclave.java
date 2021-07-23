@@ -78,18 +78,6 @@ public class VerifierEnclave extends Enclave {
             throw new IllegalArgumentException(e);
         }
 
-        // variable to store the name of the person,
-        // or whatever is used as the unique identifying string
-        String name = null;
-        try {
-            // currently, using the "name" claim from within the token.
-            // Replace with something else if needed.
-            // Could foreseeably call some other service here and then come back with the identifier
-            name = (String) token.getJWTClaimsSet().getClaim("name");
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(e);
-        }
-
         // verify that mail's public key matches the nonce in routingHint
         PublicKey senderPubKey = mail.getAuthenticatedSender();
 
@@ -104,7 +92,7 @@ public class VerifierEnclave extends Enclave {
         publicKeyValid(senderPubKey, actualPubKeyHash);
 
         // do whatever must be done, based on the RequestHandler used
-        byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), name, postOffice(mail));
+        byte[] responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), token, postOffice(mail));
 
         // temporarily, encrypt the message and post it back with the same routingHint
         postMail(postOffice(mail).encryptMail(responseMessage), routingHint);
