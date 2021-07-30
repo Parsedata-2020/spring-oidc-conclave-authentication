@@ -103,6 +103,11 @@ public class VerifierEnclave extends Enclave {
         postMail(postOffice(mail).encryptMail(responseMessage), routingHint);
     }
 
+    /**
+     * internal function to verify that the public key matches the nonce
+     * @param senderKey the actual key that was used to encrypt the mail
+     * @param nonce the nonce which should represent the hash of the public key
+     */
     private void publicKeyValid(PublicKey senderKey, String nonce) {
         String producedHash = Base64.getUrlEncoder().withoutPadding().encodeToString(
                 SHA256Hash.hash(
