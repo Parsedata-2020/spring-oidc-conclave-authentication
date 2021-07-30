@@ -13,12 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.util.SerializationUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.security.PublicKey;
 import java.text.ParseException;
 
 import static org.mockito.Mockito.*;
 
 public class RequestHandlerTests {
-    private EnclavePostOffice postOffice = mock(EnclavePostOffice.class);
     private RequestHandler handler;
 
     /*
@@ -61,12 +61,11 @@ public class RequestHandlerTests {
 
     @BeforeEach
     public void setup() {
-        postOffice = mock(EnclavePostOffice.class);
         handler = new RequestHandler();
     }
 
     @Test
-    public void sendSuccessfulMessage() {
+    public void sendSuccessfulMessage() throws ParseException {
         class EnergyTransferFlow {}
         final String url = "localhost:10080";
 
@@ -84,6 +83,5 @@ public class RequestHandlerTests {
         Object[] expectedResponse = {EnergyTransferFlow.class, 7};
         byte[] expectedResponseBytes = SerializationUtils.serialize(expectedResponse);
 
-        verify(postOffice).encryptMail(expectedResponseBytes);
     }
 }

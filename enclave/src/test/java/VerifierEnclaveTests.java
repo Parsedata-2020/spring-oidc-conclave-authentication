@@ -168,7 +168,7 @@ public class VerifierEnclaveTests {
      * Ensure that the mockHandler is NOT called for invalid token.
      */
     @Test
-    public void testInvalidToken() {
+    public void testInvalidToken() throws ParseException {
         // no need to generate a secret key or encrypt, since it shouldn't be handled
         final String invalidToken = "eyinvalidtoken";
 
@@ -211,7 +211,7 @@ public class VerifierEnclaveTests {
      * Therefore, the two do NOT match in this case. An error should be thrown.
      */
     @Test
-    public void testPubKeyMismatch() {
+    public void testPubKeyMismatch() throws ParseException {
         PrivateKey secretKey = new Curve25519PrivateKey(
                 SHA256Hash.hash("DIFFERENT secret".getBytes(StandardCharsets.UTF_8)).getBytes()
         );
