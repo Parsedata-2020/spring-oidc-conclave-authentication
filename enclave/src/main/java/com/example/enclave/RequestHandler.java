@@ -1,19 +1,15 @@
 package com.example.enclave;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
-import com.nimbusds.jose.util.ArrayUtils;
 import com.nimbusds.jwt.JWT;
-import com.r3.conclave.enclave.EnclavePostOffice;
-import com.r3.conclave.mail.PostOffice;
 import org.springframework.util.SerializationUtils;
 
-import java.nio.charset.StandardCharsets;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.text.ParseException;
-import java.util.Arrays;
 
+/**
+ * Handles requests by deserializing the passed-in message, and doing something.
+ * This is where any logical restrictions on different flows would be imposed
+ * (perhaps based on the content of the id token, etc)
+ */
 public class RequestHandler {
 
     public RequestHandler() {
@@ -32,8 +28,9 @@ public class RequestHandler {
 
         Object[] messageDeserialized = (Object[]) SerializationUtils.deserialize(message);
         String url = (String) messageDeserialized[0];
+        // do something with the url, or otherwise with the deserialized message
 
-        byte[] reserialized = SerializationUtils.serialize(Arrays.copyOfRange(messageDeserialized, 1, messageDeserialized.length-1));
+        byte[] reserialized = SerializationUtils.serialize(messageDeserialized);
         System.out.println(reserialized[0]);
 
         return reserialized;
