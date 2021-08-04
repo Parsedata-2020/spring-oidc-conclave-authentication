@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,7 +72,9 @@ public class SpringController {
                 message);
          */
         //return enclave.callEnclave(SerializationUtils.serialize(requestWrapper));
-        enclave.deliverMail(1, message.getBytes(StandardCharsets.UTF_8),
+        // PROBLEM: this is never called! Why??
+        System.out.println("Message endpoint being hit with mail: " + message);
+        enclave.deliverMail(1, Hex.decode(message),
                 ((DefaultOidcUser) securityContext.getAuthentication().getPrincipal())
                         .getIdToken().getTokenValue());
         // TODO: return a page that has asyncronous javascript to get the resulting mail

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 
@@ -44,7 +45,7 @@ public class ControllerTest {
     public void testMessage() {
         // the expected token value
         final String tokenValue = "token value";
-        final String message = "message";
+        final String message = new String(Hex.encode("message".getBytes(StandardCharsets.UTF_8)));
 
         // create the mock token we will return, which will return the given tokenValue
         OidcIdToken mockToken = mock(OidcIdToken.class);
@@ -62,6 +63,6 @@ public class ControllerTest {
 
         controller.message(mockContext, message);
         // TODO: CHANGE THIS! THIS IS SILLY (not every message has id: 1)!
-        verify(enclave).deliverMail(1, message.getBytes(StandardCharsets.UTF_8), tokenValue);
+        verify(enclave).deliverMail(1, Hex.decode(message), tokenValue);
     }
 }

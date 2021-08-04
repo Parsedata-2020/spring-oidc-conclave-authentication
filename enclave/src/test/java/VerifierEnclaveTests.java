@@ -14,6 +14,8 @@ import com.r3.conclave.mail.PostOffice;
 import com.r3.conclave.testing.MockHost;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.codec.Hex;
+import org.springframework.util.SerializationUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -126,7 +128,9 @@ public class VerifierEnclaveTests {
                 "XA4M_aEQS3mrg1GzFiVHc2lRhPaMwgkwhpn8Aj4-LuaW4j33R5tO1y2WSTQuT9MKeRyGQmTf09Q";
 
         // Message that we want to send:
-        final byte[] message = "message".getBytes(StandardCharsets.UTF_8);
+        final byte[] message = SerializationUtils.serialize(new String[] {"message"});
+        System.out.println(new String(Hex.encode(message)));
+        //final byte[] message = "message".getBytes(StandardCharsets.UTF_8);
         // expected response from stubbed mock
         final byte[] response = "response".getBytes(StandardCharsets.UTF_8);
 
@@ -234,7 +238,7 @@ public class VerifierEnclaveTests {
                 "XA4M_aEQS3mrg1GzFiVHc2lRhPaMwgkwhpn8Aj4-LuaW4j33R5tO1y2WSTQuT9MKeRyGQmTf09Q";
 
         // Message that we want to send:
-        final byte[] message = "message".getBytes(StandardCharsets.UTF_8);
+        final byte[] message = SerializationUtils.serialize(new String[] {"message"});
         // expected response from stubbed mock
         final byte[] response = "response".getBytes(StandardCharsets.UTF_8);
 
