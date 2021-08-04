@@ -129,7 +129,7 @@ public class VerifierEnclaveTests {
 
         // Message that we want to send:
         final byte[] message = SerializationUtils.serialize(new String[] {"message"});
-        System.out.println(new String(Hex.encode(message)));
+        //System.out.println(new String(Hex.encode(message)));
         //final byte[] message = "message".getBytes(StandardCharsets.UTF_8);
         // expected response from stubbed mock
         final byte[] response = "response".getBytes(StandardCharsets.UTF_8);
@@ -145,6 +145,9 @@ public class VerifierEnclaveTests {
         // encrypt our message using our private key and the enclave's public key
         PostOffice postOffice = attestation.createPostOffice(secretKey, "message");
         byte[] encryptedMessage = postOffice.encryptMail(message);
+
+        // this is the same hex-encoded encrypted message we will use when performing full manual integration tests
+        System.out.println(Hex.encode(encryptedMessage));
 
         // stub mockHandler.handleMessage so that it doesn't return null
         // and cause null pointer exceptions in the enclave
