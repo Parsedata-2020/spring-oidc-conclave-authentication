@@ -59,7 +59,7 @@ public class SpringController {
         return securityContext.getAuthentication().toString();
     }
 
-    @PostMapping(path="/user/message",
+    @GetMapping(path="/user/message",
             //consumes = MediaType.APPLICATION_JSON_VALUE
             consumes = MediaType.TEXT_PLAIN_VALUE
             //produces = MediaType.APPLICATION_JSON_VALUE
