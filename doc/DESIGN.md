@@ -83,4 +83,4 @@ Each message within an OAuth session would go through this flow:
   and sending some mail to some Corda node (this is not yet done)
   
 All of this is demonstrated in this diagram (mostly focused on the authentication step, above)
-[diagram](authentication.png)
+![diagram](authentication.png)
