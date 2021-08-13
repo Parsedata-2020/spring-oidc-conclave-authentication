@@ -74,7 +74,8 @@ public class OidcServerApplication {
 		EnclaveInstanceInfo attestation = enclave().getEnclaveInstanceInfo();
 		PostOffice postOffice = attestation.createPostOffice(secretKey, "message");
 		System.out.println("public key: " + postOffice.getSenderPublicKey());
-		final byte[] message = SerializationUtils.serialize(new String[] {"message"});
+		class EnergyTransferFlow{};
+		final byte[] message = SerializationUtils.serialize(new Object[]{"some string", EnergyTransferFlow.class, 7});
 		System.out.println(Hex.encode(postOffice.encryptMail(message)));
 
 		return mailToSend;
