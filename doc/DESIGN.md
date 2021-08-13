@@ -66,7 +66,7 @@ The process for this "tying" is as follows:
 * The host uses the authorization code to retrieve an OIDC token from the OP
   * The token contains the same `nonce` value
 
-Now, a session is established! Notice that the enclave has not been involved until this point.
+Now, a session has been established! Notice that the enclave has not been involved until this point.
 Within this session, a user can send encrypted Mail to the enclave.
 First, the user retrieves the remote attestation of the enclave by visiting the `/attestation`
 endpoint exposed by the untrusted host. The public key from this attestation can be used to generate
