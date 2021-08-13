@@ -2,6 +2,7 @@ package com.example.host;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonTypeId;
+import com.r3.conclave.common.EnclaveInstanceInfo;
 import com.r3.conclave.common.SHA256Hash;
 import com.r3.conclave.host.AttestationParameters;
 import com.r3.conclave.host.EnclaveHost;
@@ -9,6 +10,7 @@ import com.r3.conclave.host.EnclaveLoadException;
 import com.r3.conclave.host.MailCommand;
 import com.r3.conclave.mail.Curve25519PrivateKey;
 import com.r3.conclave.mail.Curve25519PublicKey;
+import com.r3.conclave.mail.PostOffice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,10 +24,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.charset.StandardCharsets;
+import java.security.PrivateKey;
 import java.util.Hashtable;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -44,6 +48,9 @@ public class OidcServerApplication {
 		EnclaveHost enclave = EnclaveHost.load(enclaveName);
 		//enclave.start(null, null);
 		System.out.println("Created enclave");
+
+
+		// return the created enclave
 		return enclave;
 	}
 
@@ -57,7 +64,20 @@ public class OidcServerApplication {
 				}
 			}
 		});
-	    return mailToSend;
+		// TODO: remove below (only for testing it out temporarily, just generate some valid mail)
+		// print the remote attestation for the enclave, as well as a sample generated mail
+		// secret key must match public key we put into initial authorization request
+		// (created with "secret" String -> to byte[] -> hashed
+		PrivateKey secretKey = new Curve25519PrivateKey(
+				SHA256Hash.hash("secret".getBytes(StandardCharsets.UTF_8)).getBytes()
+		);
+		EnclaveInstanceInfo attestation = enclave().getEnclaveInstanceInfo();
+		PostOffice postOffice = attestation.createPostOffice(secretKey, "message");
+		System.out.println("public key: " + postOffice.getSenderPublicKey());
+		final byte[] message = SerializationUtils.serialize(new String[] {"message"});
+		System.out.println(Hex.encode(postOffice.encryptMail(message)));
+
+		return mailToSend;
 	}
 
 	public static void main(String[] args) {
