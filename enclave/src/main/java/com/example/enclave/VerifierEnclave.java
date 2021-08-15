@@ -5,48 +5,42 @@ import com.nimbusds.jwt.JWTParser;
 import com.r3.conclave.common.SHA256Hash;
 import com.r3.conclave.enclave.Enclave;
 import com.r3.conclave.mail.EnclaveMail;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.web.client.HttpServerErrorException;
 
+import javax.naming.CommunicationException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.text.ParseException;
 import java.util.Base64;
+import java.util.MissingResourceException;
 
 /**
  * The enclave proper, which only receives messages and verifies the id token sent with them.
  * Messages are forwarded to RequestHandler which handles the actual business logic,
  * and should be tested separately from VerifierEnclave.
  */
-public class VerifierEnclave extends Enclave {
+public abstract class VerifierEnclave extends Enclave {
     // TODO use receiveMail with token in routingHint
 
-    RequestHandler requestHandler;
-
-    public VerifierEnclave() {
-        requestHandler = new RequestHandler();
-    }
-
     /**
-     * Set another request handler.
-     * Intended for use only when unit testing, allowing the use of a mock RequestHandler
-     * (so as to separate testing of identity verification and actual business logic
-     * to do with requests that the thing handles).
-     *
-     * A host will use an Enclave through EnclaveHost, which does NOT expose the underlying enclave.
-     * Therefore, this method will be INACCESSIBLE outside of a testing environment.
-     * More specifically, the only way to access this method is to go through MockHost instead of EnclaveHost.
-     *
-     * @param newHandler the new handler, which could be a mockito mock.
+     * The abstract method that allows children to implement details of communication with Corda nodes.
+     * handleMessage is called when a user sends some Mail message to the enclave, it is verified etc and passed here.
+     * All checks are already performed by VerifierEnclave itself, so there are certain guarantees about the
+     * validity of the parameters passed.
+     * @param message the decrypted message bytes, already guaranteed to have been sent by the user
+     * @param token the OIDC token of the user, guaranteed to be valid. This is only needed if additional
+     *              permissions etc. data is stored inside claims of the token.
      */
-    public void setRequestHandler(RequestHandler newHandler) {
-        requestHandler = newHandler;
-    }
+    protected abstract void handleMessage(byte[] message, JWT token)
+            throws IllegalArgumentException, SecurityException, MissingResourceException, UnsupportedOperationException;
 
     /**
      * Receive mail from the host, with the routingHint being the id token of the authenticated user
@@ -94,13 +88,16 @@ public class VerifierEnclave extends Enclave {
         // do whatever must be done, based on the RequestHandler used
         byte[] responseMessage = new byte[0];
         try {
-            responseMessage = requestHandler.handleMessage(mail.getBodyAsBytes(), token);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(e);
+            handleMessage(mail.getBodyAsBytes(), token);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (MissingResourceException e) {
+            e.printStackTrace();
+        } catch (UnsupportedOperationException e) {
+            e.printStackTrace();
         }
-
-        // temporarily, encrypt the message and post it back with the same routingHint
-        postMail(postOffice(mail).encryptMail(responseMessage), routingHint);
     }
 
     /**

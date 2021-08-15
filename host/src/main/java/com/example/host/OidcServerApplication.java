@@ -44,7 +44,7 @@ public class OidcServerApplication {
 		} catch (EnclaveLoadException e) {
 			System.out.println("This platform only supports simulation");
 		}
-		String enclaveName = "com.example.enclave.VerifierEnclave";
+		String enclaveName = "com.example.enclave.SimpleTestEnclave";
 		EnclaveHost enclave = EnclaveHost.load(enclaveName);
 		//enclave.start(null, null);
 		System.out.println("Created enclave");
@@ -74,8 +74,9 @@ public class OidcServerApplication {
 		EnclaveInstanceInfo attestation = enclave().getEnclaveInstanceInfo();
 		PostOffice postOffice = attestation.createPostOffice(secretKey, "message");
 		System.out.println("public key: " + postOffice.getSenderPublicKey());
-		class EnergyTransferFlow{};
-		final byte[] message = SerializationUtils.serialize(new Object[]{"some string", EnergyTransferFlow.class, 7});
+		//class EnergyTransferFlow{};
+		//final byte[] message = SerializationUtils.serialize(new Object[]{"some string", EnergyTransferFlow.class, 7});
+		final byte[] message = "test message".getBytes(StandardCharsets.UTF_8);
 		System.out.println(Hex.encode(postOffice.encryptMail(message)));
 
 		return mailToSend;

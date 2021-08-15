@@ -1,19 +1,13 @@
-package com.example.enclavetest;
-
-import com.example.enclave.RequestHandler;
 import com.example.enclave.VerifierEnclave;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTParser;
 import com.r3.conclave.common.EnclaveInstanceInfo;
 import com.r3.conclave.common.SHA256Hash;
-import com.r3.conclave.enclave.Enclave;
-import com.r3.conclave.enclave.EnclavePostOffice;
 import com.r3.conclave.host.AttestationParameters;
 import com.r3.conclave.host.EnclaveHost;
 import com.r3.conclave.host.EnclaveLoadException;
 import com.r3.conclave.host.MailCommand;
 import com.r3.conclave.mail.Curve25519PrivateKey;
-import com.r3.conclave.mail.EnclaveMail;
 import com.r3.conclave.mail.PostOffice;
 //import com.r3.conclave.testing.MockHost;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +23,6 @@ import java.util.MissingResourceException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class VerifierEnclaveTests {
     // valid OIDC token:
@@ -85,7 +78,7 @@ public class VerifierEnclaveTests {
 
 
         //enclaveHost = EnclaveHost.load("com.example.enclave.RequestHandler");
-        //enclaveHost = EnclaveHost.load("com.example.enclavetest.VerifierEnclaveTests.SimpleEnclave");
+        //enclaveHost = EnclaveHost.load("VerifierEnclaveTests.SimpleEnclave");
         enclaveHost = EnclaveHost.load("com.example.enclave.SimpleTestEnclave");
 
         // unnecessary print statement
@@ -107,6 +100,7 @@ public class VerifierEnclaveTests {
                 }
             }
         });
+
 
     }
 
@@ -158,7 +152,7 @@ public class VerifierEnclaveTests {
         //System.out.println(new String(Hex.encode(message)));
         //final byte[] message = "message".getBytes(StandardCharsets.UTF_8);
         // expected response from stubbed mock
-        final byte[] response = "response".getBytes(StandardCharsets.UTF_8);
+        //final byte[] response = "response".getBytes(StandardCharsets.UTF_8);
 
         // the test userID that is currently hard-coded into VerifierEnclave
         //final String userId = "Daniel Shteinbok";
@@ -180,11 +174,8 @@ public class VerifierEnclaveTests {
 
         // Time for verification!
         // here, just check that our mock RequestHandler object's handleMessage() was called with the expected message
-        //verify(mockHandler).handleMessage(eq(message), eq(userId), any());
-        // receive the response mail from the enclave and verify that it contains the expected response
-        byte[] responseBytes = mailToSend.getAndSet(null);
-        EnclaveMail decryptedResponse = postOffice.decryptMail(responseBytes);
-        assertArrayEquals(decryptedResponse.getBodyAsBytes(), response);
+        byte[] response = mailToSend.getAndSet(null);
+        assertArrayEquals(message, response);
     }
 
     /**
