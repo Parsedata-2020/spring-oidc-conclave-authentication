@@ -35,6 +35,10 @@ Here, the OpenID Connect provider is Mocklab, and in their particular case you c
 `<your-client-id>` and `<your-client-secret` with anything. 
 If you would like to use a different OP, change the contents of this file accordingly.
 
+Download [the Conclave 1.1 SDK (for community)](https://conclave.net/get-conclave/)
+and unzip it. Set `conclaveRepo` in `gradle.properties` 
+to match the path to the `repo/` directory inside the unpacked sdk.
+
 ### Running
 #### 1. Starting
 Run the Spring server with `./gradlew host:bootRun`.
@@ -131,3 +135,6 @@ to match the fully qualified name of the enclave that you use).
 
 Note that Conclave only allows one Enclave class per Gradle module, 
 so whatever custom class you create will have to replace RequestHandler (you will have to delete it).
+
+Also, VerifierEnclave uses Avian instead of GraalVM because Graal does not support Nimbus JWT parsing etc
+that VerifierEnclave needs to do. Avian is deprecated.
