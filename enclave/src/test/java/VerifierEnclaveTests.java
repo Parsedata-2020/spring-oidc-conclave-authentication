@@ -55,35 +55,8 @@ public class VerifierEnclaveTests {
     }
     @BeforeEach
     public void makeEnclave() throws EnclaveLoadException {
-        // make sure that the platform supports enclaves
-        // copied from other code, maybe should be removed from tests eventually (?)
-        /*
-        try {
-            EnclaveHost.checkPlatformSupportsEnclaves(true);
-            System.out.println("This platform supports enclaves in all three modes");
-        } catch (EnclaveLoadException e) {
-            System.out.println("This platform only supports simulation");
-        }
-         */
-
-        // the unique identifier of the enclave class
-        // unnnecessary as long as we are using MockHost.loadMock
-        //final String enclaveName = "com.example.enclave.VerifierEnclave";
-
-
-
-        // start the enclave based on the enclaveName class identifier
-        //enclaveHost = MockHost.loadMock(VerifierEnclave.class);
-        // create a simple implementation of VerifierEnclave
-
-
-        //enclaveHost = EnclaveHost.load("com.example.enclave.RequestHandler");
-        //enclaveHost = EnclaveHost.load("VerifierEnclaveTests.SimpleEnclave");
-        //enclaveHost = EnclaveHost.load("com.example.enclave.SimpleTestEnclave");
+        // load the enclave from the module
         enclaveHost = EnclaveHost.load("com.example.test.SimpleTestEnclave");
-
-        // unnecessary print statement
-        //System.out.println("Created enclave");
 
         // initialize mailToSend
         mailToSend = new AtomicReference<>();
