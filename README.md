@@ -138,3 +138,6 @@ so whatever custom class you create will have to replace RequestHandler (you wil
 
 Also, VerifierEnclave uses Avian instead of GraalVM because Graal does not support Nimbus JWT parsing etc
 that VerifierEnclave needs to do. Avian is deprecated.
+
+## More Stuff:
+High level design/architecture/overview with reasoning: [doc/DESIGN.md](doc/DESIGN.md)
