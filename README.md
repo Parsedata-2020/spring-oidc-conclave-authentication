@@ -1,6 +1,5 @@
 # OpenID Connect Via Enclave
-A simple attempt at running a Spring Boot server 
-(with a resource protected by OpenID Connect authentication) inside a secure enclave.
+A division of OpenID Connect authentication between an untrusted operating system, and a trusted execution environment.
 
 ### Getting started
 Clone this repository.
@@ -14,10 +13,21 @@ spring:
   security:
     oauth2:
       client:
-        registration:
-          google:
-            client-id: <your-client-id>
-            client-secret: <your-client-secret>
+        provider:
+          mocklab:
+            authorization-uri: https://oauth.mocklab.io/oauth/authorize
+            token-uri: https://oauth.mocklab.io/oauth/token
+            user-info-uri: https://oauth.mocklab.io/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: https://oauth.mocklab.io/.well-known/jwks.json
+          registration:
+            mock-oidc:
+              provider: mocklab
+              authorization-grant-type: authorization_code
+              scope: openid, profile, email
+              redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+              clientId: mocklab_oidc
+              clientSecret: whatever
 ```
 
 Remember to replace `<your-client-id>` with your actual client ID, and `<your-client-secret>`
