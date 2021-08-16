@@ -48,14 +48,6 @@ public class SpringController {
                     .getIdToken().getClaims().keySet())
         );
 
-
-        /*
-        // Doesn't work; OidcIdTokenValidator doesn't take OidcIdToken
-        (new OidcIdTokenValidator(registration)).validate(
-                ((DefaultOidcUser) securityContext.getAuthentication().getPrincipal())
-                        .getIdToken()
-        )
-         */
         return securityContext.getAuthentication().toString();
     }
 
@@ -65,14 +57,6 @@ public class SpringController {
             //produces = MediaType.APPLICATION_JSON_VALUE
     )
     public byte[] message(@CurrentSecurityContext SecurityContext securityContext, @RequestBody String message) {
-        /*
-        RequestWrapper requestWrapper = new RequestWrapper(
-                ((DefaultOidcUser) securityContext.getAuthentication().getPrincipal())
-                        .getIdToken().getTokenValue(),
-                message);
-         */
-        //return enclave.callEnclave(SerializationUtils.serialize(requestWrapper));
-        // PROBLEM: this is never called! Why??
         System.out.println("Message endpoint being hit with mail: " + message);
         enclave.deliverMail(1, Hex.decode(message),
                 ((DefaultOidcUser) securityContext.getAuthentication().getPrincipal())
@@ -84,17 +68,10 @@ public class SpringController {
 
     @GetMapping("/attestation")
     public byte[] attestation() {
+        // get the enclave's attestation
         EnclaveInstanceInfo attestation = enclave.getEnclaveInstanceInfo();
-        //byte[] attestationBytes = attestation.serialize();
-        //return attestation.toString();
-        /*
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(attestation);
-        } catch (JsonProcessingException e) {
-            return e.toString();
-        }
-         */
+
+        // serialize and return it
         return attestation.serialize();
     }
 }
