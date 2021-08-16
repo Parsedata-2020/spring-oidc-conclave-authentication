@@ -79,7 +79,8 @@ public class VerifierEnclaveTests {
 
         //enclaveHost = EnclaveHost.load("com.example.enclave.RequestHandler");
         //enclaveHost = EnclaveHost.load("VerifierEnclaveTests.SimpleEnclave");
-        enclaveHost = EnclaveHost.load("com.example.enclave.SimpleTestEnclave");
+        //enclaveHost = EnclaveHost.load("com.example.enclave.SimpleTestEnclave");
+        enclaveHost = EnclaveHost.load("com.example.test.SimpleTestEnclave");
 
         // unnecessary print statement
         //System.out.println("Created enclave");

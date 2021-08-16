@@ -44,7 +44,7 @@ public class OidcServerApplication {
 		} catch (EnclaveLoadException e) {
 			System.out.println("This platform only supports simulation");
 		}
-		String enclaveName = "com.example.enclave.SimpleTestEnclave";
+		String enclaveName = "com.example.enclave.RequestHandler";
 		EnclaveHost enclave = EnclaveHost.load(enclaveName);
 		//enclave.start(null, null);
 		System.out.println("Created enclave");
