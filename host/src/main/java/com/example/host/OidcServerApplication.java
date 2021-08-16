@@ -74,8 +74,7 @@ public class OidcServerApplication {
 		EnclaveInstanceInfo attestation = enclave().getEnclaveInstanceInfo();
 		PostOffice postOffice = attestation.createPostOffice(secretKey, "message");
 		System.out.println("public key: " + postOffice.getSenderPublicKey());
-		//class EnergyTransferFlow{};
-		//final byte[] message = SerializationUtils.serialize(new Object[]{"some string", EnergyTransferFlow.class, 7});
+		System.out.println("getEncoded: " + new String(Hex.encode(postOffice.getSenderPublicKey().getEncoded())));
 		final byte[] message = "test message".getBytes(StandardCharsets.UTF_8);
 		System.out.println(Hex.encode(postOffice.encryptMail(message)));
 
@@ -84,32 +83,6 @@ public class OidcServerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OidcServerApplication.class, args);
-		generateSecretKey("secret".getBytes(StandardCharsets.UTF_8));
 	}
-
-	// TODO DELETE!!!
-	// Just temporary, to generate data for unit tests of enclave
-	public static Curve25519PrivateKey generateSecretKey(byte[] startFrom) {
-		Curve25519PrivateKey privateKey = new Curve25519PrivateKey(
-				SHA256Hash.hash(startFrom).getBytes()
-		);
-		System.out.println("toString: " + privateKey.getPublicKey().toString());
-		System.out.println("getEncoded: " + new String(Hex.encode(privateKey.getPublicKey().getEncoded())));
-		// test whether you can go back from getEncoded().toString()
-        // getEncoded().toString() returns a weird string that doesn't turn back into 256 bits
-		if (new Curve25519PublicKey(
-				Hex.decode(
-						new String(Hex.encode(privateKey.getPublicKey().getEncoded()))
-				)
-		).equals(privateKey.getPublicKey())) {
-			System.out.println("Spring Hex-encoded keys match!");
-		} else {
-			System.out.println("Spring Hex-encoded keys don't match!");
-		}
-
-		return privateKey;
-	}
-
-
 
 }
