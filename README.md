@@ -26,8 +26,8 @@ spring:
               authorization-grant-type: authorization_code
               scope: openid, profile, email
               redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
-              clientId: mocklab_oidc
-              clientSecret: whatever
+              clientId: <your-client-id>
+              clientSecret: <your-client-secret>
 ```
 
 Remember to replace `<your-client-id>` with your actual client ID, and `<your-client-secret>`
