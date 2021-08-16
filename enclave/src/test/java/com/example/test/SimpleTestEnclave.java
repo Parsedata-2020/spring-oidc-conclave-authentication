@@ -1,14 +1,15 @@
-package com.example.enclave;
+package com.example.test;
 
+import com.example.enclave.VerifierEnclave;
 import com.nimbusds.jwt.JWT;
 
 import java.util.MissingResourceException;
 
-public class RequestHandler extends VerifierEnclave{
+public class SimpleTestEnclave extends VerifierEnclave {
 
     @Override
     protected void handleMessage(byte[] message, JWT token) throws IllegalArgumentException, SecurityException, MissingResourceException, UnsupportedOperationException {
-        System.out.println(new String(message));
+        postMail(message, "unencrypted message");
     }
 
 }
