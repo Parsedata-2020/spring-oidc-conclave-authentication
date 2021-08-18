@@ -11,24 +11,24 @@ Into the `application.yml` file, paste the following:
 
 ```
 spring:
-  security:
-    oauth2:
-      client:
-        provider:
-          mocklab:
-            authorization-uri: https://oauth.mocklab.io/oauth/authorize
-            token-uri: https://oauth.mocklab.io/oauth/token
-            user-info-uri: https://oauth.mocklab.io/userinfo
-            user-name-attribute: sub
-            jwk-set-uri: https://oauth.mocklab.io/.well-known/jwks.json
-        registration:
-          mock-oidc:
-            provider: mocklab
-            authorization-grant-type: authorization_code
-            scope: openid, profile, email
-            redirect-uri: "{baseurl}/{action}/oauth2/code/{registrationid}"
-            clientid: <your-client-id>
-            clientsecret: <your-client-secret>
+    security:
+        oauth2:
+            client:
+                provider:
+                    mocklab:
+                        authorization-uri: https://oauth.mocklab.io/oauth/authorize
+                        token-uri: https://oauth.mocklab.io/oauth/token
+                        user-info-uri: https://oauth.mocklab.io/userinfo
+                        user-name-attribute: sub
+                        jwk-set-uri: https://oauth.mocklab.io/.well-known/jwks.json
+                registration:
+                    mock-oidc:
+                        provider: mocklab
+                        authorization-grant-type: authorization_code
+                        scope: openid, profile, email
+                        redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+                        clientId: clientid
+                        clientSecret: clientsecret
 ```
 
 here, the openid connect provider is mocklab, and in their particular case you can replace the
@@ -136,7 +136,7 @@ to match the fully qualified name of the enclave that you use).
 note that conclave only allows one enclave class per gradle module, 
 so whatever custom class you create will have to replace requesthandler (you will have to delete it).
 
-also, verifierenclave uses avian instead of graalvm because graal does not support nimbus jwt parsing etc
+also, Verifierenclave uses avian instead of graalvm because graal does not support nimbus jwt parsing etc
 that verifierenclave needs to do. avian is deprecated.
 
 ## more stuff:
