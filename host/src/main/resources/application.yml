@@ -1,0 +1,19 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          mocklab:
+            authorization-uri: https://oauth.mocklab.io/oauth/authorize
+            token-uri: https://oauth.mocklab.io/oauth/token
+            user-info-uri: https://oauth.mocklab.io/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: https://oauth.mocklab.io/.well-known/jwks.json
+        registration:
+          mock-oidc:
+            provider: mocklab
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email
+            redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            clientId: clientid
+            clientSecret: clientsecret
