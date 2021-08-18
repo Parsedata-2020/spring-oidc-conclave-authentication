@@ -122,11 +122,11 @@ any client-side implementation should verify the value of the nonce in the redir
 value in the request.
 
 ## modifying
-all logic for verifying mail based on the routinghint (the oidc token) is contained in verifierenclave.
-verfierenclave is an abstract class, and after it performs the verification it calls an unimplemented `handlemessage`
+all logic for verifying mail based on the routinghint (the oidc token) is contained in VerifierEnclave.
+VerfierEnclave is an abstract class, and after it performs the verification it calls an unimplemented `handlemessage`
 method with trusted, decrypted message bytes.
 
-to add some functionality to the enclave, extend verifierenclave and implement `handlemessage` with whatever custom logic.
+to add some functionality to the enclave, extend VerifierEnclave and implement `handlemessage` with whatever custom logic.
 the motivation behind using inheritance is that it preserves access to things like `postmail` and `postoffice`.
 currently, `requesthandler.java` is the enclave class that is being used; any replacement for it must
 be reflected in `oidcserverapplication` in the `enclave` bean 
@@ -134,10 +134,10 @@ be reflected in `oidcserverapplication` in the `enclave` bean
 to match the fully qualified name of the enclave that you use).
 
 note that conclave only allows one enclave class per gradle module, 
-so whatever custom class you create will have to replace requesthandler (you will have to delete it).
+so whatever custom class you create will have to replace RequestHandler (you will have to delete it).
 
-also, Verifierenclave uses avian instead of graalvm because graal does not support nimbus jwt parsing etc
-that verifierenclave needs to do. avian is deprecated.
+also, VerifierEnclave uses avian instead of GraalVM because Graal does not support nimbus jwt parsing etc
+that VerifierEnclave needs to do. avian is deprecated.
 
 ## more stuff:
 high level design/architecture/overview with reasoning: [doc/DESIGN.md](doc/DESIGN.md)
