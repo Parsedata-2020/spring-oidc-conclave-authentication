@@ -139,5 +139,9 @@ so whatever custom class you create will have to replace RequestHandler (you wil
 also, VerifierEnclave uses avian instead of GraalVM because Graal does not support nimbus jwt parsing etc
 that VerifierEnclave needs to do. avian is deprecated.
 
+**NOTE** you can change enclave modes using the `-PenclaveMode` command-line argument.
+Use `-PenclaveMode=mock` on Windows to run mock enclaves. 
+Use`-PenclaveMode=release` in release to use the real hardware enclave (if it is supported)
+
 ## more stuff:
 high level design/architecture/overview with reasoning: [doc/DESIGN.md](doc/DESIGN.md)
